@@ -26,13 +26,28 @@ Ex. `fibonacci 2 = 1`
 Ex. `fibonacci 3 = 2`
 
 (Note: The algorithm you implement here may be slow for large numbers due to an exponentially
-increasing number of recursive calls).
+increasing number of recursive calls.)
 -/
 def fibonacci (n : Nat) :=
   match n with
   | 0 => 0
   | 1 => 1
   | m + 2 => fibonacci m + fibonacci (m+1)
+
+/--
+Finds the largest integer `m` such that `m^2 ≤ n`.
+-/
+def floorSqrt (n : Nat) : Nat := sorry
+
+/--
+Applies a function `f` `n` times to an input `x`.
+Ex. `iterate f 3 x = f (f (f x))`
+Ex. `iterate f 0 x = x`.
+-/
+def iterate (f : Int → Int) (n : Nat) (x : Int) :=
+  match n with
+  | 0 => x
+  | m+1 => f (iterate f m x)
 
 /-
 Return the sum of the largest two elements of xs.
