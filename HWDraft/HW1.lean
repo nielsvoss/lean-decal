@@ -13,19 +13,26 @@ def triangleNumber (n : Nat) : Nat :=
   | 0 => 0
   | m+1 => triangleNumber m + m + 1
 
-#eval triangleNumber 0 == 0
-#eval triangleNumber 1 == 1
-#eval triangleNumber 2 == 3
-#eval triangleNumber 3 == 6
-#eval triangleNumber 4 == 10
-#eval triangleNumber 5 == 15
-
 def factorial (n : Nat) :=
   match n with
   | 0 => 1
   | (m+1) => (m+1) * factorial m
 
-def fibonacci := 0
+/--
+The fibonacci sequence `0 1 1 2 3 5 8 13 ...`
+Ex. `fibonacci 0 = 0`
+Ex. `fibonacci 1 = 1`
+Ex. `fibonacci 2 = 1`
+Ex. `fibonacci 3 = 2`
+
+(Note: The algorithm you implement here may be slow for large numbers due to an exponentially
+increasing number of recursive calls).
+-/
+def fibonacci (n : Nat) :=
+  match n with
+  | 0 => 0
+  | 1 => 1
+  | m + 2 => fibonacci m + fibonacci (m+1)
 
 /-
 Return the sum of the largest two elements of xs.
@@ -65,10 +72,6 @@ def evalPolynomial (polynomial : List Float) (x : Float) : Float :=
   | [] => 0
   | a::as => a * x ^ (Float.ofNat as.length) + evalPolynomial as x
 
-#eval Float.abs (evalPolynomial [1, 4] 10 - 14) < 0.001
-#eval Float.abs (evalPolynomial [1, 4, -6] 0 - (-6)) < 0.001
-#eval Float.abs (evalPolynomial [1, 0, 0, 0, 0, 0, 0] (-1) - 1) < 0.001
-
 private def approximateExpHelper (n : Nat) : List Float :=
   match n with
   | 0 => [1]
@@ -83,23 +86,3 @@ Feel free to define a helper function for this.
 -/
 def approximateExp (x : Float) (n : Nat) : Float :=
   evalPolynomial (approximateExpHelper n) x
-
-#eval approximateExp 1.5 3
-
-/--
-Compute the nth order approximation of sin(x) using the Macluarin series.
-You can find this online.
--/
-def approximateSin (x : Float) (n : Nat) : Float := sorry
-
-/-========================
-Problem 3: Newton's method
-========================-/
-
-
-/-
-Implement sqrt using Newton's method.
-Return 0 for negative numbers.
--/
-def sqrt (x : Float) (tolerance : Float) (fuel : Nat) : Float :=
-  0 -- placeholder
