@@ -336,3 +336,17 @@ or equivalently, "there exists", is working at the object-level rather than the 
 :::
 
 # Philosophy
+
+:::fragment
+If a proof passes the type checker, then it is valid.
+:::
+:::fragment
+In other words, Lean's proof checker _is_ the type checker.
+:::
+
+:::fragment
+One way to think of a proof `t : p` is that `t` is a "witness" that demonstrates that we know `p`
+is true.
+:::
+
+# Conjunction
