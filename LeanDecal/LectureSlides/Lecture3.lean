@@ -169,3 +169,56 @@ def my_theorem_2 (p q r : Prop) :
         modus_ponens h₂/- !fragment
         -/ (modus_ponens h₁ hp)/- !end fragment -/)
 ```
+
+# Simplifying the logical system
+
+Lean doesn't actually have {lean}`Proof`.
+
+:::fragment
+> Simplfication #1: Write {lean}`p` instead of {lean}`Proof p`.
+:::
+
+:::fragment
+Whenever `p : Prop`, then `p` is the _type of its own proofs_.
+:::
+
+:::fragment
+Thus, `t : p` means that `t` is a proof of `p`.
+:::
+
+# Simplfying the logical system
+
+:::::attr (style := "font-size: 0.65em")
+With `Proof` gone, now our axioms look like:
+:::::
+
+```lean -show
+namespace Hidden
+```
+```lean -stretch
+axiom modus_ponens {p q : Prop} : (Implies p q) → /-
+  !fragment 2 -/(/- !end fragment -/p → q/-
+  !fragment 2 -/)/- !end fragment -/
+axiom implies_intro {p q : Prop} : (p → q) → (Implies p q)
+```
+```lean -show
+end Hidden
+```
+
+:::::attr (style := "font-size: 0.65em")
+:::fragment (index := 1)
+Note how there are functions back and forth between `Implies p q` and `p → q`.
+:::
+
+:::fragment (index := 3)
+Lean does not have `Implies`.
+:::
+
+:::fragment (index := 4)
+> Simplification #2: Write `p → q` instead of `Implies p q`.
+:::
+
+:::fragment (index := 5)
+A proof `h : p → q` that `p` implies `q` is a function that takes proofs of `p` to proofs of `q`.
+:::
+:::::
