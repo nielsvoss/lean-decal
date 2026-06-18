@@ -45,11 +45,7 @@ This fails for propositions that are not decidable:
 # Representing proofs
 
 ```lean -show
---namespace AlternateReality
 opaque Proof : Prop → Type
---opaque And : Prop → Prop → Prop
---opaque Or : Prop → Prop → Prop
---opaque Not : Prop → Prop
 set_option linter.unusedVariables false in
 opaque Implies (a b : Prop) : Prop
 opaque p : Prop
@@ -75,9 +71,13 @@ _Important: {name}`Proof` is not a real thing in Lean, we're just using it as an
 We can then use {lean}`And p q`, {lean}`Or p q`, {lean}`Not p`, and {lean}`Implies p q` to build
 compound propositions.
 ```lean -stretch
+-- !fragment
 #check And
+-- !fragment
 #check Or
+-- !fragment
 #check Not
+-- !fragment
 #check Implies
 ```
 _Important: This is still hypothetical, not how Lean actually works._
@@ -108,6 +108,7 @@ The principle of modus ponens states:
 
 Representing this in Lean:
 ```lean -stretch
+-- !fragment
 axiom modus_ponens {p q : Prop} :
   Proof (Implies p q) → Proof p → Proof q
 ```
@@ -115,19 +116,56 @@ axiom modus_ponens {p q : Prop} :
 
 # Our first proof
 
-Our first proof of the following theorem:
+:::attr (style := "font-size: 0.7em")
+Our first theorem:
 > If $`p \Rightarrow q` and $`p \Rightarrow r` and $`p`, then $`q \land r`.
+:::
 
 ```lean -show
 noncomputable section
 ```
-```lean +panel
------
+```lean -stretch
+-- !fragment
 def my_proof (p q r : Prop) :
     Proof (Implies p q) → Proof (Implies p r)
     → Proof p → Proof (And q r) :=
+-- !fragment
   fun h₁ h₂ h₃ ↦
+-- !fragment
     and_intro
+-- !fragment
       (modus_ponens h₁ h₃)
+-- !fragment
       (modus_ponens h₂ h₃)
+```
+
+# More axioms of logic
+
+The deduction theorem:
+> Suppose that from a proof of $`p` we can derive a proof of $`q`.
+  Then we can get a proof of $`p \Rightarrow q`.
+```lean -stretch
+-- !fragment
+axiom implies_intro {p q : Prop} :
+  (Proof p → Proof q) → Proof (Implies p q)
+```
+
+# Another proof
+
+Another theorem:
+> If $`p \Rightarrow q` and $`q \Rightarrow r`, then $`p \Rightarrow r`.
+```lean -stretch
+-- !fragment
+def my_theorem_2 (p q r : Prop) :
+    Proof (Implies p q) → Proof (Implies q r)
+    → Proof (Implies p r) :=
+-- !fragment
+  fun h₁ h₂ ↦
+-- !fragment
+    implies_intro
+-- !fragment
+      (fun (hp : Proof p) ↦
+-- !fragment
+        modus_ponens h₂/- !fragment
+        -/ (modus_ponens h₁ hp)/- !end fragment -/)
 ```
