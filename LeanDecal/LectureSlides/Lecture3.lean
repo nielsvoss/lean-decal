@@ -349,4 +349,22 @@ One way to think of a proof `t : p` is that `t` is a "witness" that demonstrates
 is true.
 :::
 
+# Logic operations
+
+:::fragment
+Lean still has {name}`And`, {name}`Or`, and {name}`Not` (just not `Proof` or `Implies`).
+:::
+
+```lean -stretch
+-- !fragment
+#check And
+-- !fragment
+#check Or
+-- !fragment
+#check Not
+```
+Syntax sugar: `\and` for {lean}`And`, `\or` for {lean}`Or`, `\not` for {lean}`Not`.
+
 # Conjunction
+
+`And p q` or `p \and q` is the type of pairs consisting of a proof of `p` followed by a proof of `q`.
