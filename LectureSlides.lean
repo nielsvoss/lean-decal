@@ -4,6 +4,8 @@ import VersoSlides
 
 open VersoSlides
 
+set_option linter.style.emptyLine false
+
 def main : IO UInt32 := do
   let returnCode2 ← slidesMain
     (config := { theme := "white", slideNumber := true, transition := "slide" })
