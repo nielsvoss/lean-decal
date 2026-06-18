@@ -126,7 +126,7 @@ noncomputable section
 ```
 ```lean -stretch
 -- !fragment
-def my_proof (p q r : Prop) :
+def my_first_proof (p q r : Prop) :
     Proof (Implies p q) → Proof (Implies p r)
     → Proof p → Proof (And q r) :=
 -- !fragment
@@ -156,7 +156,7 @@ Another theorem:
 > If $`p \Rightarrow q` and $`q \Rightarrow r`, then $`p \Rightarrow r`.
 ```lean -stretch
 -- !fragment
-def my_theorem_2 (p q r : Prop) :
+def my_second_proof (p q r : Prop) :
     Proof (Implies p q) → Proof (Implies q r)
     → Proof (Implies p r) :=
 -- !fragment
@@ -222,3 +222,100 @@ Lean does not have `Implies`.
 A proof `h : p → q` that `p` implies `q` is a function that takes proofs of `p` to proofs of `q`.
 :::
 :::::
+
+# First proof revisited
+
+```lean
+-- !fragment
+axiom and_intro_old {p q : Prop} :
+  Proof p → Proof q → Proof (And p q)
+-- !fragment
+axiom and_intro_new {p q : Prop} :
+  p → q → (And p q)
+
+-- !fragment
+-- Proof #1 before simplifications
+def my_first_proof_old (p q r : Prop) :
+    Proof (Implies p q) → Proof (Implies p r)
+    → Proof p → Proof (And q r) :=
+  fun h₁ h₂ h₃ ↦
+    and_intro_old
+      (modus_ponens h₁ h₃)
+      (modus_ponens h₂ h₃)
+
+-- !fragment
+-- Proof #1 after simplifications
+def my_first_proof_new (p q r : Prop) :
+    (p → q) → (p → r) → p → (And q r) :=
+  fun h₁ h₂ h₃ ↦
+    and_intro_new
+      (h₁ h₃)
+      (h₂ h₃)
+```
+
+# Second proof revisited
+
+```lean
+-- !fragment
+-- Proof #2 before simplifications
+def my_second_proof_old (p q r : Prop) :
+    Proof (Implies p q) → Proof (Implies q r)
+    → Proof (Implies p r) :=
+  fun h₁ h₂ ↦
+    implies_intro
+      (fun (hp : Proof p) ↦
+        modus_ponens h₂ (modus_ponens h₁ hp))
+
+-- !fragment
+-- Proof #2 after simplifications
+def my_second_proof_new (p q r : Prop) :
+  (p → q) → (q → r) → (p → r) :=
+    fun h₁ h₂ hp ↦ h₂ (h₁ hp)
+```
+
+# Summary so far
+
+:::fragment
+There is a type `Prop : Type` of propositions.
+:::
+
+:::fragment
+Every proposition `p : Prop` is itself a type.
+:::
+
+:::fragment
+An element `t : p` is a proof of `p`.
+:::
+
+:::fragment
+If `p q : Prop`, then `p → q : Prop` is another proposition.
+:::
+:::fragment
+- It is the type of functions from proofs of `p` to proofs of `q`.
+:::
+:::fragment
+- Equivalently, it is the type of proofs that `p` implies `q`.
+:::
+
+:::fragment
+This approach taken by Lean is known as the _propositions-as-types paradigm_,
+or the _Curry-Howard correspondence_.
+:::
+
+# Truth
+
+A proposition `p : Prop` is _true_ if it is nonempty.
+That is, `p` is true if there is at least one proof `t : p`.
+
+A proposition `p : Prop` is _false_ if it is empty.
+That is, `p` is false if there are no proofs `t : p`.
+
+:::notes
+A student might state that Godel's incompleteness theorem implies that true ≠ provable.
+This is a deep issue that seems like it might undermine the definition of truth as
+"there exists a proof".
+The reason why this is still a fine definition is because the phrase "there is at least one",
+or equivalently, "there exists", is working at the object-level rather than the meta-level.
+:::
+
+# Philosophy
