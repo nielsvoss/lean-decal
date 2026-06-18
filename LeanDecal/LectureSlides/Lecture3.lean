@@ -275,6 +275,7 @@ def my_second_proof_new (p q r : Prop) :
 
 # Summary so far
 
+:::::attr (style := "font-size: 0.65em")
 :::fragment
 There is a type `Prop : Type` of propositions.
 :::
@@ -301,14 +302,30 @@ If `p q : Prop`, then `p → q : Prop` is another proposition.
 This approach taken by Lean is known as the _propositions-as-types paradigm_,
 or the _Curry-Howard correspondence_.
 :::
+:::::
 
-# Truth
+# Defining Truth
 
+:::fragment
 A proposition `p : Prop` is _true_ if it is nonempty.
 That is, `p` is true if there is at least one proof `t : p`.
+:::
 
+:::fragment
 A proposition `p : Prop` is _false_ if it is empty.
 That is, `p` is false if there are no proofs `t : p`.
+:::
+
+:::fragment
+Example: There is a term, `trivial`, of type `True`.
+```lean -stretch
+#check trivial
+```
+:::
+
+:::fragment
+Example: There is no term of type `False`.
+:::
 
 :::notes
 A student might state that Godel's incompleteness theorem implies that true ≠ provable.
