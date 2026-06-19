@@ -363,8 +363,64 @@ Lean still has {name}`And`, {name}`Or`, and {name}`Not` (just not `Proof` or `Im
 -- !fragment
 #check Not
 ```
-Syntax sugar: `\and` for {lean}`And`, `\or` for {lean}`Or`, `\not` for {lean}`Not`.
+Syntax sugar: `∧` for {lean}`And`, `∨` for {lean}`Or`, `¬` for {lean}`Not`.
 
 # Conjunction
 
-`And p q` or `p \and q` is the type of pairs consisting of a proof of `p` followed by a proof of `q`.
+`And p q` (also written `p ∧ q`) is the type of pairs consisting of a proof of `p` followed by a
+proof of `q`.
+
+```lean -stretch
+-- !fragment
+#check And.intro -- pair up two proofs
+-- !fragment
+#check And.left -- extract the left proof
+-- !fragment
+#check And.right -- extract the right proof
+
+-- !fragment
+#check And.intro trivial trivial
+```
+
+# Example: And is commutative
+
+```lean
+-- You can swap the order of functions in an And
+def and_is_commutative (p q : Prop) : p ∧ q → q ∧ p :=
+  -- !fragment
+  -- To prove an implication, start with `fun`
+  fun (h : p ∧ q) ↦
+    -- !fragment
+    -- To get a proof of `q ∧ p`, we supply proofs
+    -- of `q` and `p` separately
+    And.intro
+      -- !fragment
+      -- We get a proof of `q`
+      (And.right h)
+      -- !fragment
+      -- We get a proof of `p`
+      (And.left h)
+```
+
+# Disjunction
+
+{lean}`Or p q` (also written {lean}`p ∨ q`) is the type whose elements are either proofs of `p`
+or proofs of `q`.
+
+```lean -stretch
+-- !fragment
+#check Or.intro_left
+-- !fragment
+-- Note that `b` is an explicit parameter
+-- !fragment
+#check Or.intro_right
+
+-- Proof by cases
+#check Or.elim
+```
+
+# Example: proof by cases
+
+# The theorem keyword
+
+Two special functions not discussed here
