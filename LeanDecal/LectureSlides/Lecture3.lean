@@ -512,8 +512,122 @@ We say "p _if and only if_ q".
 #check Iff.mpr -- modus ponens reversed
 ```
 
+# More keywords
+
+:::fragment
+`have h : p := t` - Introduce a fact, for use later
+:::
+
+:::fragment
+`show p from t` - Same as `t`, but re-state the goal for clarity (also helps with type inference).
+:::
+
+```lean
+-- !fragment
+def combine' (p q : Prop) : p → ¬p → q :=
+  fun (hp : p) (hnp : ¬ p) ↦
+  have h : False := hnp hp
+  show q from False.elim h
+```
+
 # The theorem keyword
 
-Two special functions not discussed here
+:::fragment
+The keyword `theorem` means the same as `def`, except the return type must be a proposition.
+:::
+
+:::fragment
+(We will learn later that it is also _opaque_ and _noncomputable_).
+:::
+
+# One of De Morgan's Laws
+
+In-class example:
+
+```lean
+theorem de_morgan {p q : Prop} : ¬(p ∨ q) ↔ ¬p ∧ ¬q :=
+  sorry
+```
+
+# Axiom
+
+:::fragment
+The `axiom` keyword introduces an arbitrary term without provding it a proof.
+:::
+
+:::fragment
+```lean -stretch
+axiom unsound : False
+```
+:::
+
+We can now use this to prove the Riemann Hypothesis:
+:::fragment
+```lean
+theorem riemann_hypothesis : RiemannHypothesis :=
+  False.elim unsound
+```
+:::
+
+# Printing axioms
+
+:::fragment
+The "standard three" axioms are {name}`propext`, {name}`Classical.choice`, and {name}`Quot.sound`.
+:::
+
+:::fragment
+The `#print axioms` command tells you all the axioms in use by a term:
+:::
+
+```lean
+-- !fragment
+#print axioms RiemannHypothesis
+-- !fragment
+#print axioms riemann_hypothesis
+```
+
+# LEM
+
+:::fragment
+*The law of the excluded middle* (LEM): For any proposition `p`, we have `p ∨ ¬p`.
+:::
+
+:::fragment
+It requires all three standard axioms to prove.
+:::
+
+```lean
+-- !fragment
+#check Classical.em
+-- !fragment
+#print axioms Classical.em
+```
+
+# The other De Morgan's law
+
+:::fragment
+Earlier we proved `¬(p ∨ q) ↔ ¬p ∧ ¬q` _constructively_ (i.e. without LEM).
+:::
+
+:::fragment
+`¬(p ∧ q) ↔ ¬p ∨ ¬q` can only be shown _classically_ (i.e. using LEM).
+:::
+
+:::fragment
+In class example:
+```lean
+theorem de_morgan_2 {p q : Prop} : ¬(p ∧ q) ↔ ¬p ∨ ¬q :=
+  sorry
+```
+:::
 
 # The Curry-Howard correspondence
+
+# Universes revisited
+
+:::fragment
+`Prop` is the lowest universe:
+:::
+:::fragment
+`Prop : Type : Type 1 : Type 2 : Type 3 : ...`
+:::
