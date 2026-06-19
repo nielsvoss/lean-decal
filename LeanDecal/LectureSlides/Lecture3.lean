@@ -116,9 +116,9 @@ _Important: This is still hypothetical, not how Lean actually works._
 :::::attr (style := "font-size: 0.7em")
 :::fragment
 In normal logic, the following is true:
-:::
 
 > From a proof of $`p` and a proof of $`q`, we can obtain a proof of $`p \land q`.
+:::
 
 :::fragment
 We can represent this in Lean as follows:
@@ -143,7 +143,9 @@ The principle of modus ponens states:
 > From a proof of $`p \Rightarrow q` and a proof of $`p`, we can obtain a proof of $`q`.
 :::
 
+:::fragment
 Representing this in Lean:
+:::
 ```lean -stretch
 -- !fragment
 axiom modus_ponens {p q : Prop} :
@@ -232,7 +234,9 @@ Thus, `t : p` means that `t` is a proof of `p`.
 # Simplfying the logical system
 
 :::::attr (style := "font-size: 0.65em")
+:::fragment
 With `Proof` gone, now our axioms look like:
+:::
 :::::
 
 ```lean -show
@@ -406,7 +410,9 @@ Lean still has {name}`And`, {name}`Or`, and {name}`Not` (just not `Proof` or `Im
 -- !fragment
 #check Not
 ```
+:::fragment
 Syntax sugar: `∧` for {lean}`And`, `∨` for {lean}`Or`, `¬` for {lean}`Not`.
+:::
 
 # Conjunction
 
@@ -475,6 +481,7 @@ def or_is_commutative (p q : Prop) : p ∨ q → q ∨ p :=
     -- Here, we use proof by cases
     -- !fragment 3
     Or.elim h
+      -- !fragment
       -- Goal 1: Show p → q ∨ p
       (/- !fragment 4
       -/fun (h : p) ↦ Or.intro_right q h/- !end fragment-/)
@@ -589,7 +596,7 @@ The keyword `theorem` means the same as `def`, except the return type must be a 
 
 In-class example:
 
-```lean
+```lean -stretch
 theorem de_morgan {p q : Prop} : ¬(p ∨ q) ↔ ¬p ∧ ¬q :=
   sorry
 ```
@@ -611,7 +618,7 @@ We can now use this to prove the Riemann Hypothesis:
 :::
 
 :::fragment
-```lean
+```lean -stretch
 theorem riemann_hypothesis : RiemannHypothesis :=
   False.elim unsound
 ```
