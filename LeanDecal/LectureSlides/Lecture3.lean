@@ -234,38 +234,40 @@ Thus, `t : p` means that `t` is a proof of `p`.
 # Simplfying the logical system
 
 :::::attr (style := "font-size: 0.65em")
-:::fragment
+:::fragment (index := 0)
 With `Proof` gone, now our axioms look like:
 :::
 :::::
 
+:::fragment (index := 1)
 ```lean -show
 namespace Hidden
 ```
 ```lean -stretch
 axiom modus_ponens {p q : Prop} : (Implies p q) → /-
-  !fragment 2 -/(/- !end fragment -/p → q/-
-  !fragment 2 -/)/- !end fragment -/
+  !fragment 3 -/(/- !end fragment -/p → q/-
+  !fragment 3 -/)/- !end fragment -/
 axiom implies_intro {p q : Prop} : (p → q) → (Implies p q)
 ```
 ```lean -show
 end Hidden
 ```
+:::
 
 :::::attr (style := "font-size: 0.65em")
-:::fragment (index := 1)
+:::fragment (index := 2)
 Note how there are functions back and forth between `Implies p q` and `p → q`.
 :::
 
-:::fragment (index := 3)
+:::fragment (index := 4)
 Lean does not have `Implies`.
 :::
 
-:::fragment (index := 4)
+:::fragment (index := 5)
 > Simplification #2: Write `p → q` instead of `Implies p q`.
 :::
 
-:::fragment (index := 5)
+:::fragment (index := 6)
 A proof `h : p → q` that `p` implies `q` is a function that takes proofs of `p` to proofs of `q`.
 :::
 :::::
@@ -481,12 +483,12 @@ def or_is_commutative (p q : Prop) : p ∨ q → q ∨ p :=
     -- Here, we use proof by cases
     -- !fragment 3
     Or.elim h
-      -- !fragment
+      -- !fragment 4
       -- Goal 1: Show p → q ∨ p
-      (/- !fragment 4
+      (/- !fragment 5
       -/fun (h : p) ↦ Or.intro_right q h/- !end fragment-/)
       -- Goal 2: Show q → q ∨ p
-      (/- !fragment 5
+      (/- !fragment 6
       -/fun (h : q) ↦ Or.intro_left p h/- !end fragment-/)
 ```
 
