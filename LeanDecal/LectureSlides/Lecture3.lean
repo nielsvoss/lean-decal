@@ -345,8 +345,8 @@ In other words, Lean's proof checker _is_ the type checker.
 :::
 
 :::fragment
-One way to think of a proof `t : p` is that `t` is a "witness" that demonstrates that we know `p`
-is true.
+One way to think of a proof `t : p` is that `t` is a "witness" or "evidence" that demonstrates that
+we know `p` is true.
 :::
 
 # Logic operations
@@ -415,12 +415,105 @@ or proofs of `q`.
 -- !fragment
 #check Or.intro_right
 
+-- !fragment
 -- Proof by cases
 #check Or.elim
 ```
 
 # Example: proof by cases
 
+```lean
+def or_is_commutative (p q : Prop) : p ∨ q → q ∨ p :=
+  -- Goal: Show p ∨ q → q ∨ p
+  -- !fragment 1
+  fun (h : p ∨ q) ↦
+    -- New goal: Given h : p ∨ q, show q ∨ p
+    -- !fragment 2
+    -- Here, we use proof by cases
+    -- !fragment 3
+    Or.elim h
+      -- Goal 1: Show p → q ∨ p
+      (/- !fragment 4
+      -/fun (h : p) ↦ Or.intro_right q h/- !end fragment-/)
+      -- Goal 2: Show q → q ∨ p
+      (/- !fragment 5
+      -/fun (h : q) ↦ Or.intro_left p h/- !end fragment-/)
+```
+
+# The principle of explosion
+
+:::fragment
+*The princple of explosion*: From a proof of `False`, you can derive anything.
+:::
+
+:::fragment
+> If 2 + 2 = 5, then pigs can fly.
+:::
+
+```lean -stretch
+-- !fragment
+#check False.elim
+
+-- !fragment
+def my_theorem (p : Prop) : p ∨ False → p :=
+  -- !fragment
+  fun (h : p ∨ False) ↦
+    -- !fragment
+    Or.elim h
+      -- !fragment
+      -- Goal 1: p → p
+      -- !fragment
+      (fun (h : p) ↦ h)
+      -- !fragment
+      -- Goal 2 : False → p
+      -- !fragment
+      (fun (h : False) ↦ False.elim h)
+```
+
+# Negation
+
+:::fragment
+{lean}`Not p` (also written {lean}`¬p`) is the type of proofs that {lean}`p` _is false_.
+:::
+
+:::fragment
+It is definitionally equal to {lean}`p → False`.
+:::
+
+```lean
+-- !fragment
+def combine (p q : Prop) : p → ¬p → q :=
+  -- !fragment
+  fun (hp : p) (hnp : ¬ p) ↦
+    -- Goal: Get an element of q
+    -- !fragment
+    False.elim
+      -- Goal: Get an element of False
+      -- !fragment
+      (hnp hp)
+```
+
+# Biconditional
+
+:::fragment
+{lean}`Iff p q` (also written {lean}`p ↔ q`) means that {lean}`p → q` and {lean}`q → p`.
+:::
+
+:::fragment
+We say "p _if and only if_ q".
+:::
+
+```lean
+-- !fragment
+#check Iff.intro
+-- !fragment
+#check Iff.mp -- modus ponens
+-- !fragment
+#check Iff.mpr -- modus ponens reversed
+```
+
 # The theorem keyword
 
 Two special functions not discussed here
+
+# The Curry-Howard correspondence
