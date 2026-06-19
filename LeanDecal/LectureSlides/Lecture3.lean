@@ -623,6 +623,9 @@ We can now use this to prove the Riemann Hypothesis:
 ```lean -stretch
 theorem riemann_hypothesis : RiemannHypothesis :=
   False.elim unsound
+-- !fragment
+theorem not_riemann_hypothesis : ¬ RiemannHypothesis :=
+  False.elim unsound
 ```
 :::
 
