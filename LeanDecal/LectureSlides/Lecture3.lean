@@ -670,7 +670,7 @@ Earlier we proved `¬(p ∨ q) ↔ ¬p ∧ ¬q` _constructively_ (i.e. without L
 
 :::fragment
 In class example:
-```lean
+```lean -stretch
 theorem de_morgan_2 {p q : Prop} : ¬(p ∧ q) ↔ ¬p ∨ ¬q :=
   sorry
 ```
@@ -684,7 +684,7 @@ theorem de_morgan_2 {p q : Prop} : ¬(p ∧ q) ↔ ¬p ∨ ¬q :=
 `Prop` is the lowest universe:
 :::
 :::fragment
-`Prop : Type : Type 1 : Type 2 : Type 3 : ...`
+`Prop : Type : Type 1 : Type 2 : ...`
 :::
 
 :::fragment
@@ -692,7 +692,7 @@ Actually, `Prop` is shorthand for `Sort 0`, and `Type u` is shorthand for `Sort 
 :::
 
 :::fragment
-```lean
+```lean -stretch
 #check show Sort 0 from True
 #check show Sort 3 from Type 1
 ```
@@ -709,7 +709,7 @@ Lean tries to guess what term should go there. If it fails, it tells you the des
 :::
 
 :::fragment
-```lean +error
+```lean +error -stretch
 def my_theorem' (p : Prop) : p ∨ False → p :=
   fun (h : p ∨ False) ↦
     Or.elim h
