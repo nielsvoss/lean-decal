@@ -676,7 +676,74 @@ theorem de_morgan_2 {p q : Prop} : ¬(p ∧ q) ↔ ¬p ∨ ¬q :=
 ```
 :::
 
-# The Curry-Howard correspondence
+# The Curry-Howard Correspondence
+
+:::::attr (style := "font-size: 0.5em")
+::::table +colHeaders +border +rowSeps +colSeps
+*
+  * Logic
+  * Type Theory
+*
+  * {fragment}[Propositions]
+  * {fragment}[Types]
+*
+  * {fragment}[Proofs]
+  * {fragment}[Terms]
+*
+  * {fragment}[`A` is true]
+  * {fragment}[`A` has an element]
+*
+  * {fragment}[`A` is false]
+  * {fragment}[`A` does not have an element]
+::::
+:::::
+
+# The Curry-Howard Correspondence
+
+:::::attr (style := "font-size: 0.5em")
+::::table +colHeaders +border +rowSeps +colSeps
+*
+  * Logic
+  * Type Theory
+*
+  * {fragment}[`True`]
+  * {fragment}[`Unit`]
+*
+  * {fragment}[`False`]
+  * {fragment}[`Empty`]
+*
+  * {fragment}[`A ∧ B`]
+  * {fragment}[`A × B`]
+*
+  * {fragment}[`A ∨ B`]
+  * {fragment}[`A ⊕ B`]
+*
+  * {fragment}[`A` implies `B`]
+  * {fragment}[`A → B`]
+::::
+:::::
+
+# The Curry-Howard Correspondence
+
+:::::attr (style := "font-size: 0.5em")
+::::table +colHeaders +border +rowSeps +colSeps
+*
+  * Logic
+  * Type Theory
+*
+  * {fragment}[*Modus ponens:* From `A → B` and `A`, we conclude `B`]
+  * {fragment}[*Function application:* From `f : A → B` and `x : A`, we have `f x : B`]
+*
+  * {fragment}[*And introduction:* From `A` and `B`, we conclude `A ∧ B`]
+  * {fragment}[*Pairing:* From `x : A` and `y : B`, we have `(x, y) : A × B`]
+*
+  * {fragment}[*Proof by cases:* If `A → C` and `B → C` then `A ∨ B → C`]
+  * {fragment}[*Sum elimination:* If `f : A → C` and `g : B → C` then `Sum.elim f g : A ⊕ B → C`]
+*
+  * {fragment}[*Deduction Theorem:* If we can prove `B` given `A`, then `A → B`]
+  * {fragment}[*Lambda functions:* We can bind `x : A` to construct `(fun x ↦ ...) : A → B`]
+::::
+:::::
 
 # Universes revisited
 
