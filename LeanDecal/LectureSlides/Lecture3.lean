@@ -14,33 +14,48 @@ set_option linter.style.emptyLine false
 
 # Overview
 
+:::fragment
 Today's lecture is all about the {lean}`Prop` type.
+:::
 
+:::fragment
 {lean}`Prop` is the type of *propositions*, which are mathematical statements that can be true or
 false.
+:::
 
+:::fragment
 Unlike {name}`Bool`, given a {lean}`Prop` we don't always know if it is true or false.
+:::
 
 # Decidable Propositions
 
-:::attr (style := "font-size: 0.6em")
+:::::attr (style := "font-size: 0.6em")
 
+:::fragment
 Some propositions are _decidable_, which means that Lean can automatically convert them into a
 {name}`Bool`.
+:::
 
+:::fragment
 Recall that {name}`True` and {name}`False` are propositions, while {name}`true` and {name}`false`
 are booleans.
+:::
 
 ```lean -stretch
+-- !fragment
 #eval (True : Bool)
+-- !fragment
 #eval (False ∧ True : Bool)
 ```
 
+:::fragment
 This fails for propositions that are not decidable:
 ```lean +error -stretch
+-- !fragment
 #check (RiemannHypothesis : Bool)
 ```
 :::
+:::::
 
 # Representing proofs
 
@@ -52,24 +67,35 @@ opaque p : Prop
 opaque q : Prop
 ```
 
-:::attr (style := "font-size: 0.6em")
+:::::attr (style := "font-size: 0.6em")
+:::fragment
 In Lean, _proofs are mathematical objects_.
-This means you can have functions that take in proofs and ouptut proofs.
+This means you can have functions that take in proofs and output proofs.
+:::
 
+:::fragment
 One design decision that lean _could_ have made is to have a new type, `Proof p`, which is the type
 of proofs of the proposition `p`.
+:::
 
+:::fragment
 ```lean -stretch
 #check Proof
 ```
+:::
+
+:::fragment
 _Important: {name}`Proof` is not a real thing in Lean, we're just using it as an example._
 :::
+:::::
 
 # Representing proofs
 
-:::attr (style := "font-size: 0.6em")
+:::::attr (style := "font-size: 0.6em")
+:::fragment
 We can then use {lean}`And p q`, {lean}`Or p q`, {lean}`Not p`, and {lean}`Implies p q` to build
 compound propositions.
+:::
 ```lean -stretch
 -- !fragment
 #check And
@@ -80,31 +106,42 @@ compound propositions.
 -- !fragment
 #check Implies
 ```
+:::fragment
 _Important: This is still hypothetical, not how Lean actually works._
 :::
+:::::
 
 # And introduction rule
 
-:::attr (style := "font-size: 0.7em")
+:::::attr (style := "font-size: 0.7em")
+:::fragment
 In normal logic, the following is true:
+:::
 
 > From a proof of $`p` and a proof of $`q`, we can obtain a proof of $`p \land q`.
 
+:::fragment
 We can represent this in Lean as follows:
 
 ```lean -stretch
 axiom and_intro {p q : Prop} :
   Proof p → Proof q → Proof (And p q)
 ```
+:::
+
+:::fragment
 _The `axiom` keyword in Lean is like `def` but you don't need to provide a value._
 :::
+:::::
 
 # Modus ponens
 
-:::attr (style := "font-size: 0.7em")
+:::::attr (style := "font-size: 0.7em")
+:::fragment
 The principle of modus ponens states:
 
 > From a proof of $`p \Rightarrow q` and a proof of $`p`, we can obtain a proof of $`q`.
+:::
 
 Representing this in Lean:
 ```lean -stretch
@@ -112,14 +149,16 @@ Representing this in Lean:
 axiom modus_ponens {p q : Prop} :
   Proof (Implies p q) → Proof p → Proof q
 ```
-:::
+:::::
 
 # Our first proof
 
-:::attr (style := "font-size: 0.7em")
+:::::attr (style := "font-size: 0.7em")
+:::fragment
 Our first theorem:
 > If $`p \Rightarrow q` and $`p \Rightarrow r` and $`p`, then $`q \land r`.
 :::
+:::::
 
 ```lean -show
 noncomputable section
@@ -141,9 +180,11 @@ def my_first_proof (p q r : Prop) :
 
 # More axioms of logic
 
+:::fragment
 The deduction theorem:
 > Suppose that from a proof of $`p` we can derive a proof of $`q`.
   Then we can get a proof of $`p \Rightarrow q`.
+:::
 ```lean -stretch
 -- !fragment
 axiom implies_intro {p q : Prop} :
@@ -172,7 +213,9 @@ def my_second_proof (p q r : Prop) :
 
 # Simplifying the logical system
 
+:::fragment
 Lean doesn't actually have {lean}`Proof`.
+:::
 
 :::fragment
 > Simplfication #1: Write {lean}`p` instead of {lean}`Proof p`.
@@ -442,6 +485,7 @@ def or_is_commutative (p q : Prop) : p ∨ q → q ∨ p :=
 
 # The principle of explosion
 
+:::::attr (style := "font-size: 0.7em")
 :::fragment
 *The princple of explosion*: From a proof of `False`, you can derive anything.
 :::
@@ -449,6 +493,7 @@ def or_is_commutative (p q : Prop) : p ∨ q → q ∨ p :=
 :::fragment
 > If 2 + 2 = 5, then pigs can fly.
 :::
+:::::
 
 ```lean -stretch
 -- !fragment
@@ -561,7 +606,10 @@ axiom unsound : False
 ```
 :::
 
+:::fragment
 We can now use this to prove the Riemann Hypothesis:
+:::
+
 :::fragment
 ```lean
 theorem riemann_hypothesis : RiemannHypothesis :=
