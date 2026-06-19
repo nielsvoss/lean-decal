@@ -1,5 +1,6 @@
 import LeanDecal.LectureSlides.Lecture2
 import LeanDecal.LectureSlides.Lecture3
+import LeanDecal.LectureSlides.Lecture4
 import VersoSlides
 
 open VersoSlides
@@ -18,5 +19,11 @@ def main : IO UInt32 := do
     (doc := %doc LeanDecal.LectureSlides.Lecture3)
   if returnCode3 ≠ 0 then return returnCode3
   IO.FS.rename "_slides/index.html" "_slides/Lecture3.html"
+
+  let returnCode4 ← slidesMain
+    (config := { theme := "white", slideNumber := true, transition := "slide" })
+    (doc := %doc LeanDecal.LectureSlides.Lecture4)
+  if returnCode4 ≠ 0 then return returnCode4
+  IO.FS.rename "_slides/index.html" "_slides/Lecture4.html"
 
   return 0
