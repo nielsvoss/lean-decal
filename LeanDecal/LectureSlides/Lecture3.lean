@@ -631,3 +631,34 @@ theorem de_morgan_2 {p q : Prop} : ¬(p ∧ q) ↔ ¬p ∨ ¬q :=
 :::fragment
 `Prop : Type : Type 1 : Type 2 : Type 3 : ...`
 :::
+
+:::fragment
+Actually, `Prop` is shorthand for `Sort 0`, and `Type u` is shorthand for `Sort (u + 1)`.
+:::
+
+:::fragment
+```lean
+#check show Sort 0 from True
+#check show Sort 3 from Type 1
+```
+:::
+
+# Useful trick
+
+:::fragment
+Instead of writing `sorry`, you can write `_`.
+:::
+
+:::fragment
+Lean tries to guess what term should go there. If it fails, it tells you the desired type.
+:::
+
+:::fragment
+```lean +error
+def my_theorem' (p : Prop) : p ∨ False → p :=
+  fun (h : p ∨ False) ↦
+    Or.elim h
+      (fun (h : p) ↦ h)
+      _
+```
+:::
