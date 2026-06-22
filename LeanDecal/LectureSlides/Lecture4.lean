@@ -109,16 +109,114 @@ theorem farApart_symm' {n m : Nat} :
   or_comm.mp
 ```
 
+# Equality
+
+```lean -show
+variable {α : Type}
+variable (x y : α)
+```
+
+:::fragment
+$`x = y` is shorthand for `Eq x y`.
+:::
+
+```lean -panel
+-- !fragment
+#check Eq
+
+-- !fragment
+#check Eq.refl
+-- !fragment
+#check Eq.symm
+-- !fragment
+#check Eq.trans
+```
+
+# Properties of equality
+
+```lean -panel
+-- !fragment
+example (x : Nat) : 2 + x = 2 + x := Eq.refl (2 + x)
+
+-- !fragment
+example (x y z : Nat) (h₁ : 2 * x = y) (h₂ : 2 * z = y) :
+    2 * x = 2 * z :=
+  -- !fragment
+  have h₃ : y = 2 * z := Eq.symm h₂
+  -- !fragment
+  show 2 * x = 2 * z from Eq.trans h₁ h₃
+```
+
+# Definitional equality
+
+:::fragment
+- By computation, {lean}`5` and {lean}`2 + 3` are _definitionally equal_.
+:::
+:::fragment
+- Thus, {lean}`5 = 5` and {lean}`5 = 2 + 3` are definitionally equal.
+:::
+:::fragment
+- `Eq.refl 5` has type `5 = 5`, so it also has type `5 = 2 + 3`.
+:::
+:::fragment
+- Thus, `Eq.refl 5` is a valid proof of `5 = 2 + 3`.
+:::
+
+```lean -panel -stretch
+-- !fragment
+theorem five_eq_two_add_three : 5 = 2 + 3 := Eq.refl 5
+```
+
+# Definitional equality
+
+:::fragment
+*The principle of proof by reflexivity*: Whenever `x` and `y` are definitionally equal,
+then `Eq.refl _` is a valid proof of `x = y`.
+:::
+
+# Proofs by reflexivity
+
+:::fragment
+{name}`rfl` is short for `Eq.refl _`.
+:::
+
+```lean
+-- !fragment
+#check rfl
+
+-- !fragment
+variable (f : Nat → Nat)
+
+-- !fragment
+example (x : Nat) : (fun n ↦ f (2 * n)) x = f (2 * x) := rfl
+-- !fragment
+example : f (10 + 12) = f 22 := rfl
+
+-- !fragment
+def a : Nat := 37
+example : a = 37 := rfl
+```
+
+# Nat addition
+
+:::fragment
+- *Nat addition is right recursive:*
+`x + 0` is defeq to `x`, but `0 + x` is not defeq to `x`.
+:::
+
+```lean +error
+-- !fragment
+example (x : Nat) : x + 0 = x := rfl
+-- !fragment
+example (x : Nat) : 0 + x = x := rfl
+```
+
 # More relations
 
 ```lean
 -- !fragment
 def SameLength (s t : String) : Prop :=
   s.length = t.length
-
--- !fragment
-def Dominates (f g : Nat → Nat) : Prop :=
-  ∀ n : Nat, g n ≤ f n
 
 -- !fragment
 def DistanceOne (x y : Int) : Prop :=
