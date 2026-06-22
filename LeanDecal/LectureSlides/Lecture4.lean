@@ -119,11 +119,6 @@ theorem farApart_symm' {n m : Nat} :
 
 # Equality
 
-```lean -show
-variable {α : Type}
-variable (x y : α)
-```
-
 :::fragment
 `x = y` is shorthand for `Eq x y`.
 :::
@@ -304,6 +299,75 @@ example : f a = g a := congrFun h₂ a
 example : f a = g b := congr h₂ h₁
 ```
 
+# Calc mode
+
+```lean +panel
+-- !fragment
+variable (α : Type) (a b c d : α)
+  (h₁ : a = b) (h₂ : b = c) (h₃ : c = d)
+
+-- !fragment
+example : a = d :=
+-- !fragment
+  Eq.trans h₁ (Eq.trans h₂ h₃)
+
+-- !fragment
+example : a = d :=
+  calc
+    a = b := h₁
+    _ = c := h₂
+    _ = d := h₃
+```
+
+# Another example
+
+In-class example: Rewrite the following using calc mode
+```lean -panel -stretch
+variable (a b c d e : Nat)
+
+theorem T
+    (h1 : a = b)
+    (h2 : b = c + 1)
+    (h3 : c = d)
+    (h4 : e = 1 + d) :
+    a = e :=
+  have q₁ : c + 1 = d + 1 := congrArg (fun n ↦ n + 1) h3
+  have q₂ : d + 1 = 1 + d := Nat.add_comm d 1
+  have q₃ : 1 + d = e := Eq.symm h4
+  Eq.trans h1 (Eq.trans h2 (Eq.trans q₁ (Eq.trans q₂ q₃)))
+```
+
+# The existential quantifier
+
+:::fragment
+Fix a predicate `P : α → Prop`.
+:::
+
+:::fragment
+Then `Exists P` (also written `∃ (x : α), P x`) means that there is at least one
+element `x : α` such that `P x` is true.
+:::
+
+:::fragment
+It consists of a tuple `⟨x, hx⟩` where `x` is an element of `α` and `hx` is a proof of `P x`.
+:::
+
+:::fragment
+_Note: This behaves similarly to (but is distinct from) the sum type `∑ (x : α), β x`_
+:::
+
+# Exists
+
+```lean -panel +stretch
+-- !fragment
+#check Exists
+
+-- !fragment
+#check Exists.intro
+-- !fragment
+#check Exists.elim
+```
+
 # TODO
 
--- TODO: Sets, filters or topology as exercise, proof irrelevance
+-- TODO: Sets, filters or topology or graphs as exercise, proof irrelevance
