@@ -180,7 +180,7 @@ then `Eq.refl _` is a valid proof of `x = y`.
 {name}`rfl` is short for `Eq.refl _`.
 :::
 
-```lean
+```lean -panel
 -- !fragment
 #check rfl
 
@@ -204,43 +204,77 @@ example : a = 37 := rfl
 `x + 0` is defeq to `x`, but `0 + x` is not defeq to `x`.
 :::
 
-```lean +error
+```lean +error -panel
 -- !fragment
 example (x : Nat) : x + 0 = x := rfl
 -- !fragment
 example (x : Nat) : 0 + x = x := rfl
 ```
 
-# More relations
-
-```lean
--- !fragment
-def SameLength (s t : String) : Prop :=
-  s.length = t.length
-
--- !fragment
-def DistanceOne (x y : Int) : Prop :=
-  x - y = 1 ∨ y - x = 1
-```
-
-# Reflexive relations
+# Substitution
 
 :::fragment
-A binary relation $`R(x,y)` on a set $`S` is called reflexive iff $`R(x,x)` for all $`x ∈ S`
+Let `P` be a predicate.
 :::
+
+:::fragment
+*Substitution property of equality*:
+If `P x` and `x = y`, then `P y`.
+:::
+
+:::fragment
+`P` is called the _motive_.
+:::
+
+```lean -panel -stretch
+-- !fragment
+#check Eq.subst
+
+-- !fragment
+example (α : Type) (a b : α) (p : α → Prop)
+        (h1 : a = b) (h2 : p a) : p b :=
+  Eq.subst h1 h2
+
+-- !fragment
+example (α : Type) (a b : α) (p : α → Prop)
+    (h1 : a = b) (h2 : p a) : p b :=
+  h1 ▸ h2
+```
+
+# Congruence
+
+*Theorem (Congruence on the argument):*
+Let $`f : A \to B` and $`x, y \in A`. Then $`f x = f y`.
+
+```lean -panel
+theorem congruence {α β : Type} (f : α → β) (x y : α)
+    : x = y → f x = f y :=
+  -- !fragment
+  fun (h : x = y) ↦
+  -- !fragment
+  let P : α → Prop := fun a ↦ f x = f a
+  -- !fragment
+  have hx : P x := show f x = f x from rfl
+  -- !fragment
+  show f x = f y from Eq.subst (motive := P) h hx
+```
+
+# Congruence
 
 ```lean -panel
 -- !fragment
-def IsReflexive {α : Type} (R : α → α → Prop) : Prop :=
-  ∀ x : α, R x x
+variable (α : Type)
+variable (a b : α)
+variable (f g : α → Nat)
+variable (h₁ : a = b)
+variable (h₂ : f = g)
 
 -- !fragment
-#print SameLength
-
+example : f a = f b := congrArg f h₁
 -- !fragment
-theorem reflexive_sameLength : IsReflexive SameLength :=
-  fun (x : String) ↦
-  sorry
+example : f a = g a := congrFun h₂ a
+-- !fragment
+example : f a = g b := congr h₂ h₁
 ```
 
 # TODO
