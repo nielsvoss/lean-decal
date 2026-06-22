@@ -53,7 +53,11 @@ Another way to write {lean}`(x : α) → β x` is {lean}`∀ (x : α), β x`.
 :::
 
 :::fragment
-If `P : α → Prop` is a predicate, then a function `h : ∀ (x : α), P x` takes in an
+Let `P : α → Prop` be a predicate.
+:::
+
+:::fragment
+A function `h : ∀ (x : α), P x` takes in an
 element `x : α` and outputs a proof `h x : P x`.
 :::
 
@@ -65,6 +69,7 @@ In other words, an element `∀ (x : α), P x` means that `P x` must be true for
 # Proofs with the universal quantifier
 
 ```lean -panel
+-- !fragment
 example {α : Type} (P Q : α → Prop) :
   (∀ x : α, P x → Q x) → (∀ x : α, P x) → (∀ x : α, Q x) :=
   -- !fragment
@@ -81,9 +86,12 @@ example {α : Type} (P Q : α → Prop) :
 
 # Binary relations
 
+:::fragment
 A _binary relation_ is a function `P : α → β → Prop`.
+:::
 
 ```lean -panel
+-- !fragment
 def FarApart (n m : Nat) : Prop :=
   n + 100 ≤ m ∨ m + 100 ≤ n
 
@@ -117,7 +125,7 @@ variable (x y : α)
 ```
 
 :::fragment
-$`x = y` is shorthand for `Eq x y`.
+`x = y` is shorthand for `Eq x y`.
 :::
 
 ```lean -panel
@@ -134,7 +142,7 @@ $`x = y` is shorthand for `Eq x y`.
 
 # Properties of equality
 
-```lean -panel
+```lean -panel -stretch
 -- !fragment
 example (x : Nat) : 2 + x = 2 + x := Eq.refl (2 + x)
 
@@ -149,6 +157,7 @@ example (x y z : Nat) (h₁ : 2 * x = y) (h₂ : 2 * z = y) :
 
 # Definitional equality
 
+::::attr (style := "font-size: 0.6em")
 :::fragment
 - By computation, {lean}`5` and {lean}`2 + 3` are _definitionally equal_.
 :::
@@ -161,28 +170,34 @@ example (x y z : Nat) (h₁ : 2 * x = y) (h₂ : 2 * z = y) :
 :::fragment
 - Thus, `Eq.refl 5` is a valid proof of `5 = 2 + 3`.
 :::
+::::
 
 ```lean -panel -stretch
 -- !fragment
 theorem five_eq_two_add_three : 5 = 2 + 3 := Eq.refl 5
 ```
 
-# Definitional equality
+# Proof by reflexivity
 
 :::fragment
 *The principle of proof by reflexivity*: Whenever `x` and `y` are definitionally equal,
 then `Eq.refl _` is a valid proof of `x = y`.
 :::
 
-# Proofs by reflexivity
-
 :::fragment
 {name}`rfl` is short for `Eq.refl _`.
 :::
 
+# Proofs by reflexivity
+
 ```lean -panel
 -- !fragment
 #check rfl
+
+-- !fragment
+example : 2 * 100 = 200 := rfl
+-- !fragment
+example : [3, 4] ++ [5, 6] = [3, 4, 5, 6] := rfl
 
 -- !fragment
 variable (f : Nat → Nat)
@@ -204,7 +219,7 @@ example : a = 37 := rfl
 `x + 0` is defeq to `x`, but `0 + x` is not defeq to `x`.
 :::
 
-```lean +error -panel
+```lean +error -panel -stretch
 -- !fragment
 example (x : Nat) : x + 0 = x := rfl
 -- !fragment
@@ -213,6 +228,7 @@ example (x : Nat) : 0 + x = x := rfl
 
 # Substitution
 
+::::attr (style := "font-size: 0.6em")
 :::fragment
 Let `P` be a predicate.
 :::
@@ -225,6 +241,7 @@ If `P x` and `x = y`, then `P y`.
 :::fragment
 `P` is called the _motive_.
 :::
+::::
 
 ```lean -panel -stretch
 -- !fragment
@@ -243,10 +260,13 @@ example (α : Type) (a b : α) (p : α → Prop)
 
 # Congruence
 
+:::fragment
 *Theorem (Congruence on the argument):*
-Let $`f : A \to B` and $`x, y \in A`. Then $`f x = f y`.
+Let $`f : A \to B` and $`x, y \in A`. Then $`f(x) = f(y)`.
+:::
 
 ```lean -panel
+-- !fragment
 theorem congruence {α β : Type} (f : α → β) (x y : α)
     : x = y → f x = f y :=
   -- !fragment
@@ -262,6 +282,13 @@ theorem congruence {α β : Type} (f : α → β) (x y : α)
 # Congruence
 
 ```lean -panel
+-- !fragment
+#check congrArg -- We just proved this
+-- !fragment
+#check congrFun
+-- !fragment
+#check congr
+
 -- !fragment
 variable (α : Type)
 variable (a b : α)
