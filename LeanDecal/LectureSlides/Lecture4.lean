@@ -101,6 +101,48 @@ theorem farApart_symm {n m : Nat} :
   -- m + 100 ≤ n ∨ n + 100 ≤ m
   -- !fragment
   show m + 100 ≤ n ∨ n + 100 ≤ m from or_comm.mp h
+
+-- !fragment
+theorem farApart_symm' {n m : Nat} :
+    FarApart n m → FarApart m n :=
+  -- !fragment
+  or_comm.mp
+```
+
+# More relations
+
+```lean
+-- !fragment
+def SameLength (s t : String) : Prop :=
+  s.length = t.length
+
+-- !fragment
+def Dominates (f g : Nat → Nat) : Prop :=
+  ∀ n : Nat, g n ≤ f n
+
+-- !fragment
+def DistanceOne (x y : Int) : Prop :=
+  x - y = 1 ∨ y - x = 1
+```
+
+# Reflexive relations
+
+:::fragment
+A binary relation $`R(x,y)` on a set $`S` is called reflexive iff $`R(x,x)` for all $`x ∈ S`
+:::
+
+```lean -panel
+-- !fragment
+def IsReflexive {α : Type} (R : α → α → Prop) : Prop :=
+  ∀ x : α, R x x
+
+-- !fragment
+#print SameLength
+
+-- !fragment
+theorem reflexive_sameLength : IsReflexive SameLength :=
+  fun (x : String) ↦
+  sorry
 ```
 
 # TODO
