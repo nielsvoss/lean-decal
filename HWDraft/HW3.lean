@@ -56,27 +56,51 @@ example : ¬¬(p ∨ ¬p) := sorry
 Problem X: SKI Combinator Calculus and Hilbert Style Deduction
 ===========================-/
 
--- If you have these three functions, you can prove a lot of theorems without using the `fun` keyword.
-theorem S {A B C : Prop} : (A → (B → C)) → ((A → B) → (A → C)) := fun x y z ↦ x z (y z)
-theorem K {A B : Prop} : A → B → A := fun x y ↦ x
-theorem I {A : Prop} : A → A := fun x ↦ x
-
+section SKI
+set_option linter.unusedVariables false
 variable {A B C D E F : Prop}
+
+-- If you have these three functions, you can prove a lot of theorems without using the `fun` keyword.
+theorem S : (A → (B → C)) → ((A → B) → (A → C)) := fun x y z ↦ x z (y z)
+theorem K : A → B → A := fun x y ↦ x
+theorem I : A → A := fun x ↦ x
 
 /- According to
 https://en.wikipedia.org/wiki/SKI_combinator_calculus#Conversion_of_lambda_terms_to_SKI_combinators
 you can convert any proof that uses purely `fun` to a proof without `fun` but only `S`, `K`, and `I`
 by repeatedly applying the following 4 rules:
 
-- Replace `fun x ↦ x` with `I`
-- If the expression `e₁` does not contain `x`, replace `fun x ↦ e₁` with `K e₁`
-- If the expression `e₁` does not contain `x`, replace `fun x ↦ e₁ x` with `e₁`.
-- Replace `fun x ↦ e₁ e₂` with `S (fun x ↦ e₁) (fun x ↦ e₂)`.
+1. Replace `fun x ↦ x` with `I`
+2. If the expression `e₁` does not contain `x`, replace `fun x ↦ e₁` with `K e₁`
+3. If the expression `e₁` does not contain `x`, replace `fun x ↦ e₁ x` with `e₁`.
+4. If none of the above cases apply, replace `fun x ↦ e₁ e₂` with `S (fun x ↦ e₁) (fun x ↦ e₂)`.
 -/
 
 -- For example:
 example : A → (A → B) → B := fun x ↦ fun y ↦ y x
+-- Apply rule 4
 example : A → (A → B) → B := fun x ↦ (S (fun y ↦ y)) (fun y ↦ x)
+-- Apply rule 2
+example : A → (A → B) → B := fun x ↦ (S (fun y ↦ y)) (K x)
+-- Apply rule 1
 example : A → (A → B) → B := fun x ↦ (S I) (K x)
+-- Apply rule 4
 example : A → (A → B) → B := S (fun x ↦ S I) (fun x ↦ K x)
+-- Apply rule 3
+example : A → (A → B) → B := S (fun x ↦ S I) K
+-- Apply rule 2
 example : A → (A → B) → B := S (K (S I)) K
+
+-- Rewrite each of the following proofs to only use `S`, `K`, and `I` and not `fun`.
+example : (A → B → C) → B → A → C := fun x ↦ fun y ↦ fun z ↦ (x z) y
+example : (A → B → C) → B → A → C := fun x ↦ fun y ↦ S (fun z ↦ x z) (fun z ↦ y)
+example : (A → B → C) → B → A → C := fun x ↦ S (fun y ↦ S x) (fun y ↦ K y)
+example : (A → B → C) → B → A → C := fun x ↦ S (K (S x)) K
+example : (A → B → C) → B → A → C := S (fun x ↦ S (K (S x))) (fun x ↦ K)
+example : (A → B → C) → B → A → C := S (S (fun x ↦ S) (fun x ↦ K (S x))) (K K)
+example : (A → B → C) → B → A → C := S (S (K S) (S (fun x ↦ K) (fun x ↦ S x))) (K K)
+example : (A → B → C) → B → A → C := S (S (K S) (S (K K) S)) (K K)
+
+-- A proof that only uses `S`, `K`, and `I` without using `fun` is said to be "Hilbert-style".
+
+end SKI
