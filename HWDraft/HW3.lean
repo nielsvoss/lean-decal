@@ -102,6 +102,16 @@ example : (A → B → C) → B → A → C := S (S (K S) (S (fun x ↦ K) (fun 
 example : (A → B → C) → B → A → C := S (S (K S) (S (K K) S)) (K K)
 
 example : ((A → B) → C) → (D → B) → (D → C) := fun x ↦ fun y ↦ fun z ↦ x (fun a ↦ y z)
+example : ((A → B) → C) → (D → B) → (D → C) := fun x ↦ fun y ↦ fun z ↦ x (K (y z))
+example : ((A → B) → C) → (D → B) → (D → C) := fun x ↦ fun y ↦ S (fun z ↦ x) (fun z ↦ K (y z))
+example : ((A → B) → C) → (D → B) → (D → C) := fun x ↦ fun y ↦ S (K x) (S (fun z ↦ K) (fun z ↦ y z))
+example : ((A → B) → C) → (D → B) → (D → C) := fun x ↦ fun y ↦ S (K x) (S (K K) y)
+example : ((A → B) → C) → (D → B) → (D → C) := fun x ↦ S (fun y ↦ S (K x)) (fun y ↦ S (K K) y)
+example : ((A → B) → C) → (D → B) → (D → C) := fun x ↦ S (K (S (K x))) (S (K K))
+example : ((A → B) → C) → (D → B) → (D → C) := S (fun x ↦ S (K (S (K x)))) (fun x ↦ S (K K))
+example : ((A → B) → C) → (D → B) → (D → C) := S (S (fun x ↦ S) (fun x ↦ K (S (K x)))) (K (S (K K)))
+example : ((A → B) → C) → (D → B) → (D → C) := S (S (K S) (S (fun x ↦ K) (fun x ↦ S (K x)))) (K (S (K K)))
+example : ((A → B) → C) → (D → B) → (D → C) := S (S (K S) (S (K K) (S (fun x ↦ S) (fun x ↦ K x)))) (K (S (K K)))
 example : ((A → B) → C) → (D → B) → (D → C) := S (S (K S) (S (K K) (S (K S) K))) (K (S (K K)))
 
 -- A proof that only uses `S`, `K`, and `I` without using `fun` is said to be "Hilbert-style".
