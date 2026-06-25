@@ -101,6 +101,9 @@ example : (A → B → C) → B → A → C := S (S (fun x ↦ S) (fun x ↦ K (
 example : (A → B → C) → B → A → C := S (S (K S) (S (fun x ↦ K) (fun x ↦ S x))) (K K)
 example : (A → B → C) → B → A → C := S (S (K S) (S (K K) S)) (K K)
 
+example : ((A → B) → C) → (D → B) → (D → C) := fun x ↦ fun y ↦ fun z ↦ x (fun a ↦ y z)
+example : ((A → B) → C) → (D → B) → (D → C) := S (S (K S) (S (K K) (S (K S) K))) (K (S (K K)))
+
 -- A proof that only uses `S`, `K`, and `I` without using `fun` is said to be "Hilbert-style".
 
 end SKI
